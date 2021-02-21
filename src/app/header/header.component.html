@@ -1,0 +1,41 @@
+<p>
+    <mat-toolbar color="primary">
+        <button (click)="onClickNavToggle()" mat-button>
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span *ngIf="moblieQueryMax">MyShip</span>
+        <span class="flex-fill"></span>
+        <div class="d-flex align-items-center">
+            <button mat-icon-button color="" aria-label="Example icon button with a heart icon">
+                <mat-icon>search</mat-icon>
+            </button>
+            <div class="vl"></div>
+            <button mat-icon-button color="" aria-label="Example icon button with a heart icon">
+                <mat-icon [matBadge]="demonMailNoti" matBadgeColor="warn">mail_outline</mat-icon>
+            </button>
+            <div class="vl"></div>
+            <button mat-icon-button color="" aria-label="Example icon button with a heart icon">
+                <mat-icon [matBadge]="demoNoti" matBadgeColor="warn">notifications_none</mat-icon>
+            </button>
+        </div>
+        <button mat-button [matMenuTriggerFor]="list">
+            <img class="avatar rounded-circle bg-white"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png">
+            <span class="ml-2">Admin Shippy</span>
+        </button>
+        <mat-menu #list="matMenu">
+            <button mat-menu-item>
+                <mat-icon>dialpad</mat-icon>
+                <span>Redial</span>
+            </button>
+            <button mat-menu-item disabled>
+                <mat-icon>voicemail</mat-icon>
+                <span>Check voice mail</span>
+            </button>
+            <button mat-menu-item>
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Logout</span>
+            </button>
+        </mat-menu>
+    </mat-toolbar>
+</p>

@@ -22,7 +22,7 @@ export class StockHomeComponent implements OnInit {
   feedData() {
     const dummy: Product[] = [
       {
-        name: "Veniam nemo ut dolores qui et ",
+        name: "Veniam nemo ut dolores qui et ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
         stock: 1,
         price: 20000,
         image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",

@@ -1,10 +1,13 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #sidenav [mode]="moblieQueryMax.matches ? 'over': 'side'"
     [opened]="moblieQueryMax.matches ? false: true">
-  <app-side-nav></app-side-nav>
+    <app-side-nav></app-side-nav>
   </mat-sidenav>
   <mat-sidenav-content>
     <app-header [mediaQuery]="!moblieQueryMax.matches" (toggle)="sidenav.toggle()" (sayHai)="onSayhai($event)">
     </app-header>
+    <div class="contect-wrapper">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

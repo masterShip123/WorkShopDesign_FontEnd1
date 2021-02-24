@@ -12,3 +12,7 @@ body {
 :focus:focus {
   outline: unset;
 }
+
+.mat-form-field-wrapper{
+  padding-bottom: 0;
+}

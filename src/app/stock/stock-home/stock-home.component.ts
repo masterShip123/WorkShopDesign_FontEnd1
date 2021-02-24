@@ -13,6 +13,7 @@ export class StockHomeComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Product>();
 
+  textSearch: string;
   constructor() { }
 
   ngOnInit(): void {
@@ -55,4 +56,15 @@ export class StockHomeComponent implements OnInit {
     this.dataSource.data = dummy
   }
 
+  search(event: Event) {
+    let fillterValue = '';
+    if (event) {
+      fillterValue = (event.target as HTMLInputElement).value; // แปลงเป็น Input แล้วดึงค่าออกมา
+    }
+    this.dataSource.filter = fillterValue.trim().toLowerCase(); // Search Datable ผ่าน filter
+  }
+  clearSearch() {
+    this.textSearch = '';
+    this.search(null);
+  }
 }

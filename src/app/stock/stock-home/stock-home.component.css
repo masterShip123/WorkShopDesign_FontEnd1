@@ -65,6 +65,20 @@ td.mat-cell {
   table-layout: fixed;
 }
 
+::ng-deep th.mat-column-price>.mat-sort-header-container{
+  justify-content: flex-end;
+  
+}
+
+::ng-deep th.mat-column-stock>.mat-sort-header-container{
+  justify-content: center;
+}
+
+::ng-deep .mat-sort-header-arrow,
+::ng-deep .mat-sort-header-sorted{
+  color: rgb(12, 247, 168);
+}
+
 @media (max-width: 600px) {
   th.mat-header-cell:nth-child(2) {
     min-width: 400px;

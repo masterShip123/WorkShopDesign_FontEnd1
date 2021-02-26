@@ -16,3 +16,13 @@ body {
 .mat-form-field-wrapper{
   padding-bottom: 0;
 }
+
+.snackbar{
+  color: white;
+}
+.snackbar-susses{
+  background-color: green;
+}
+.snackbar-error{
+  background-color: red;
+}

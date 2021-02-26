@@ -1,8 +1,10 @@
+import Swal from 'sweetalert2';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Product } from 'src/app/models/product.model';
+import { Product, ProductResponse } from 'src/app/models/product.model';
+import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
   selector: 'app-stock-home',
@@ -20,7 +22,7 @@ export class StockHomeComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort; // Call กับ Html
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; // Call ทำ Pagin ฝั่ง Data Table
 
-  constructor() { }
+  constructor(private networkService: NetworkService) { }
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
@@ -29,69 +31,24 @@ export class StockHomeComponent implements OnInit {
   }
 
   feedData() {
-    const dummy: Product[] = [
-      {
-        name: "Veniam nemo ut dolores qui et ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        stock: 1,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
+    //async
+    // subscribe (observer) เฝ้าสังเกตุการณ์
+    this.networkService.getProducts().subscribe(
+      data => { //suscess
+        this.dataSource.data = data.map(item => {
+          item.image = this.networkService.getProductImageURL(item.image);
+          return item;
+        });
       },
-      {
-        name: "mac book",
-        stock: 22222,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
+      error => {
+        alert(JSON.stringify(error.error.message));
       },
-      {
-        name: "mac book",
-        stock: 3333,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
-      },
-      {
-        name: "mac book",
-        stock: 445,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
-      },
-      {
-        name: "mac book",
-        stock: 588,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
-      },
-      {
-        name: "Veniam nemo ut dolores qui et ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        stock: 1,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
-      },
-      {
-        name: "mac book",
-        stock: 22222,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
-      },
-      {
-        name: "mac book",
-        stock: 3333,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
-      },
-      {
-        name: "mac book",
-        stock: 445,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
-      },
-      {
-        name: "mac book",
-        stock: 588,
-        price: 20000,
-        image: "https://www.flaticon.com/svg/vstatic/svg/141/141078.svg?token=exp=1614078478~hmac=772a0d9f0f2c5d746887c8c805138cec",
+      () => { //complete
+        console.log('Feed net Work');
       }
-    ]
-    this.dataSource.data = dummy
+    )
+
+
   }
 
   search(event: Event) {
@@ -104,5 +61,38 @@ export class StockHomeComponent implements OnInit {
   clearSearch() {
     this.textSearch = '';
     this.search(null);
+  }
+
+  onClickDeleteProduct(product: ProductResponse) {
+    //Confrerm
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Delete Product: ${product.name}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        this.networkService.deleteProduct(product.id).subscribe(
+          data => {
+            // Swal.fire(
+            //   'Deleted!',
+            //   'Your file has been deleted.',
+            //   'success'
+            // )
+            this.feedData();
+          },
+          error => {
+            console.log(JSON.stringify(error.message))
+          }
+        )
+
+      }
+    })
+
+
   }
 }

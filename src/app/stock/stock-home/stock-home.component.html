@@ -57,7 +57,7 @@
             <td mat-cell *matCellDef="let data">
                 <div class="over-lay mx-auto d-block border-top border-left border-right rounded-top">
                     <img [src]="data.image" class="bg-light rounded-top w-100 " alt="">
-                    <div class="over-lay-text text-center mat-small">1150</div>
+                    <div class="over-lay-text text-center mat-small">{{data.id}}</div>
                 </div>
             </td>
         </ng-container>
@@ -82,12 +82,14 @@
         <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef class="text-uppercase text-center"> Action </th>
             <td mat-cell *matCellDef="let data" class="text-center">
-                <button mat-icon-button>
+                <button mat-icon-button [routerLink]="['/stock/edit' , data.id]">
                     <mat-icon>
-                        <mat-icon class="material-icons-outlined ">edit</mat-icon>
+                        <mat-icon class="material-icons-outlined ">
+                            edit
+                        </mat-icon>
                     </mat-icon>
                 </button>
-                <button mat-icon-button>
+                <button mat-icon-button (click) = "onClickDeleteProduct(data)">
                     <mat-icon>
                         delete_outline
                     </mat-icon>

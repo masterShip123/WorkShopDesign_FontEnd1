@@ -43,7 +43,6 @@ export class StockCreateComponent implements OnInit {
 
     this.networkService.addProduct(product).subscribe(
       data => {
-        alert(JSON.stringify(data));
         this.location.back();
       },
       error => {

@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Product, ProductResponse } from 'src/app/models/product.model';
 import { NetworkService } from 'src/app/services/network.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-stock-home',
@@ -22,7 +23,8 @@ export class StockHomeComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort; // Call กับ Html
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; // Call ทำ Pagin ฝั่ง Data Table
 
-  constructor(private networkService: NetworkService) { }
+  constructor(
+    private networkService: NetworkService) { }
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;

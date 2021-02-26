@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NetworkService } from 'src/app/services/network.service';
 import { Location } from '@angular/common';
 import { NgForm } from '@angular/forms';
@@ -15,7 +15,11 @@ export class StockEditComponent implements OnInit {
   imagePreview: string | ArrayBuffer;
   file: File;
   @ViewChild('productForm', { static: true }) productForm: NgForm;
-  constructor(private activatedRoute: ActivatedRoute, private networkService: NetworkService, private location: Location) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private networkService: NetworkService,
+    private location: Location,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -29,10 +33,11 @@ export class StockEditComponent implements OnInit {
       data => {
         var { id, name, price, stock, image } = { ...data };
         this.imagePreview = this.networkService.getProductImageURL(data.image);
-        this.productForm.setValue({id, name, price, stock });
+        this.productForm.setValue({ id, name, price, stock });
       },
       error => {
         console.log(error.error.message);
+        this.router.navigate(["/stock"]);
       }
     )
   }
@@ -60,7 +65,7 @@ export class StockEditComponent implements OnInit {
     product.stock = values.stock;
     product.image = this.file;
 
-    this.networkService.editProduct(values.id , product).subscribe(
+    this.networkService.editProduct(values.id, product).subscribe(
       data => {
         //alert(JSON.stringify(data));
         this.location.back();

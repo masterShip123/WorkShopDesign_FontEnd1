@@ -5,45 +5,64 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpResponse,
-  HttpErrorResponse
+  HttpErrorResponse,
+  HttpEventType
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { tap } from 'rxjs/operators';
+import { tap, finalize, delay } from 'rxjs/operators';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { LoadingService } from '../services/loading.service';
 
 @Injectable()
 export class RestInterceptor implements HttpInterceptor {
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar, private loadingService: LoadingService) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const url = `${environment.baseURL}api/${request.url}`;
     const urlReq = request.clone({ url });
 
-    return next.handle(urlReq).pipe(
-      tap(event => {
-          if (event instanceof HttpResponse) {
-            const config: MatSnackBarConfig = {
-              duration: 4000,
-              verticalPosition: 'top',
-              horizontalPosition: 'end',
-              panelClass: ['snackbar', 'snackbar-susses']
-            };
+    if (!request.reportProgress) {
+      this.loadingService.indetermina.next(true);
+    }
 
-            switch (event.status) {
-              case 200:
-                if (request.method === 'PUT') {
-                  this.snackBar.open('Edit Success', null, config);
-                }
-                break;
-              case 201:
-                this.snackBar.open('Create Success', null, config);
-                break;
-              case 204:
-                this.snackBar.open('Delete Success', null, config);
-                break;
-            }
+    return next.handle(urlReq).pipe(
+      tap(
+        event => {
+          switch (event.type) {
+            case HttpEventType.UploadProgress:
+              const progress = Math.round(100 * event.loaded / event.total);
+              console.log(progress);
+              this.loadingService.determina.next(progress);
+
+              break;
+            case HttpEventType.Response:
+              const config: MatSnackBarConfig = {
+                duration: 4000,
+                verticalPosition: 'top',
+                horizontalPosition: 'end',
+                panelClass: ['snackbar', 'snackbar-susses']
+              };
+
+              switch (event.status) {
+                case 200:
+                  if (request.method === 'PUT') {
+                    this.snackBar.open('Edit Success', null, config);
+                  } else if (request.method === 'POST') {
+                    console.log('CheckStatus : ' + event.status);
+                    this.snackBar.open('Create Success', null, config);
+                  }
+                  break;
+                case 201:
+                  console.log('CheckStatus : ' + event.status);
+                  this.snackBar.open('Create Success', null, config);
+                  break;
+                case 204:
+                  this.snackBar.open('Delete Success', null, config);
+                  break;
+              }
+              break;
           }
         },
         error => {
@@ -64,7 +83,11 @@ export class RestInterceptor implements HttpInterceptor {
             }
           }
         }
-      )
+      ),
+      delay(1000),
+      finalize(() => {
+        this.loadingService.indetermina.next(false);
+      })
     );
   }
 }

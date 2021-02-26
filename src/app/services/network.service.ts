@@ -28,11 +28,15 @@ export class NetworkService {
   }
 
   addProduct(product: Product): Observable<ProductResponse> {
-    return this.httpClient.post<ProductResponse>(`product`, this.makeFormData(product));
+    return this.httpClient.post<ProductResponse>(`product`, this.makeFormData(product), {
+      reportProgress: true
+    });
   }
 
-  editProduct(id: number ,product: Product): Observable<ProductResponse> {
-    return this.httpClient.put<ProductResponse>(`product/${id}`, this.makeFormData(product));
+  editProduct(id: number, product: Product): Observable<ProductResponse> {
+    return this.httpClient.put<ProductResponse>(`product/${id}`, this.makeFormData(product), {
+      reportProgress: true
+    });
   }
 
   deleteProduct(id: number): Observable<any> {

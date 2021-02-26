@@ -3,13 +3,13 @@
     alt="">
  
 <mat-nav-list dense class="mt-2">
-    <a mat-list-item href="http://www.google.com">
+    <a mat-list-item [routerLink]="['/stock']" routerLinkActive="is_active" (click) = "onClickNavClose()" >
         <span mat-line><span class="mat-h4">Stock</span></span>
         <img matListAvatar
             src="https://www.flaticon.com/svg/vstatic/svg/3846/3846630.svg?token=exp=1613897103~hmac=e62b79ed2489c4f9a39b8c010515ba6a"
             alt="">
     </a>
-    <a mat-list-item href="http://www.google.com">
+    <a mat-list-item [routerLink]="['/shop']" routerLinkActive="is_active" (click) = "onClickNavClose()" >
         <span mat-line><span class="mat-h4">Shop</span></span>
         <img matListAvatar
             src="https://www.flaticon.com/premium-icon/icons/svg/2984/2984692.svg"

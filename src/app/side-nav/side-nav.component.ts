@@ -1,3 +1,5 @@
+import { Output } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SideNavComponent implements OnInit {
 
+
+  @Output("close") navClose = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onClickNavClose(){
+    this.navClose.emit();
   }
 
 }
